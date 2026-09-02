@@ -1,205 +1,564 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rayyan Scientific Calculator</title>
+<title>Rayyan Saddique - Scientific Calculator</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial, sans-serif;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-body{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(135deg,#667eea,#764ba2);
-    padding:20px;
+body {
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #141e30, #243b55);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
 }
 
-.calculator{
-    width:100%;
-    max-width:420px;
-    background:#171717;
-    padding:20px;
-    border-radius:25px;
-    box-shadow:0 15px 40px rgba(0,0,0,.4);
+.container {
+    width: 100%;
+    max-width: 430px;
 }
 
-h1{
-    text-align:center;
-    color:white;
-    font-size:25px;
-    margin-bottom:15px;
+.calculator {
+    background: #1b1b1b;
+    border-radius: 25px;
+    padding: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
 }
 
-.display{
-    width:100%;
-    height:85px;
-    background:#252525;
-    border:none;
-    border-radius:15px;
-    color:white;
-    font-size:32px;
-    text-align:right;
-    padding:15px;
-    margin-bottom:15px;
+.title {
+    text-align: center;
+    color: white;
+    font-size: 23px;
+    font-weight: bold;
+    margin-bottom: 15px;
 }
 
-.buttons{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:10px;
+.display {
+    width: 100%;
+    height: 90px;
+    background: #101010;
+    border: none;
+    border-radius: 15px;
+    color: #00ff99;
+    font-size: 30px;
+    text-align: right;
+    padding: 15px;
+    margin-bottom: 15px;
+    outline: none;
 }
 
-button{
-    height:58px;
-    border:none;
-    border-radius:14px;
-    font-size:18px;
-    font-weight:bold;
-    cursor:pointer;
-    background:#333;
-    color:white;
-    transition:.15s;
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 9px;
 }
 
-button:hover{
-    transform:scale(1.04);
-    background:#444;
+button {
+    height: 58px;
+    border: none;
+    border-radius: 13px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #333;
+    color: white;
+    transition: 0.15s;
 }
 
-.operator{
-    background:#f39c12;
+button:hover {
+    transform: scale(1.04);
+    background: #444;
 }
 
-.equal{
-    background:#27ae60;
+button:active {
+    transform: scale(0.96);
 }
 
-.clear{
-    background:#e74c3c;
+.operator {
+    background: #ff9500;
 }
 
-.scientific{
-    background:#2980b9;
+.function {
+    background: #444;
 }
 
-.zero{
-    grid-column:span 2;
+.equal {
+    background: #00a86b;
+}
+
+.clear {
+    background: #e63946;
+}
+
+.history-btn {
+    background: #5a4fcf;
+}
+
+.history {
+    display: none;
+    margin-top: 15px;
+    background: #101010;
+    border-radius: 15px;
+    padding: 15px;
+    color: white;
+}
+
+.history h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.history-list {
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.history-item {
+    padding: 9px;
+    border-bottom: 1px solid #333;
+    cursor: pointer;
+}
+
+.history-item:hover {
+    background: #222;
+}
+
+.no-history {
+    text-align: center;
+    color: #888;
+    padding: 10px;
+}
+
+.clear-history {
+    width: 100%;
+    height: 45px;
+    margin-top: 12px;
+    background: #e63946;
+}
+
+.footer {
+    text-align: center;
+    color: #bbb;
+    margin-top: 15px;
+    font-size: 13px;
 }
 </style>
 </head>
 
 <body>
 
+<div class="container">
+
 <div class="calculator">
 
-<h1>🔬 Rayyan Scientific Calculator</h1>
+<div class="title">
+Rayyan Saddique Scientific Calculator
+</div>
 
-<input id="display" class="display" type="text" value="0" readonly>
+<input type="text" id="display" class="display" value="0" readonly>
 
 <div class="buttons">
 
-<button class="clear" onclick="clearDisplay()">C</button>
-<button onclick="deleteLast()">DEL</button>
-<button class="scientific" onclick="addValue('(')">(</button>
-<button class="scientific" onclick="addValue(')')">)</button>
+<button class="clear" onclick="clearDisplay()">AC</button>
+<button class="function" onclick="deleteLast()">DEL</button>
+<button class="function" onclick="percentage()">%</button>
+<button class="operator" onclick="addToDisplay('/')">÷</button>
 
-<button class="scientific" onclick="addValue('Math.sin(')">sin</button>
-<button class="scientific" onclick="addValue('Math.cos(')">cos</button>
-<button class="scientific" onclick="addValue('Math.tan(')">tan</button>
-<button class="scientific" onclick="addValue('Math.sqrt(')">√</button>
+<button class="function" onclick="addToDisplay('sin(')">sin</button>
+<button class="function" onclick="addToDisplay('cos(')">cos</button>
+<button class="function" onclick="addToDisplay('tan(')">tan</button>
+<button class="operator" onclick="addToDisplay('*')">×</button>
 
-<button class="scientific" onclick="addValue('Math.log10(')">log</button>
-<button class="scientific" onclick="addValue('Math.log(')">ln</button>
-<button class="scientific" onclick="addValue('Math.PI')">π</button>
-<button class="scientific" onclick="addValue('**')">xʸ</button>
+<button class="function" onclick="addToDisplay('log(')">log</button>
+<button class="function" onclick="addToDisplay('ln(')">ln</button>
+<button class="function" onclick="addToDisplay('sqrt(')">√</button>
+<button class="operator" onclick="addToDisplay('-')">−</button>
 
-<button onclick="addValue('7')">7</button>
-<button onclick="addValue('8')">8</button>
-<button onclick="addValue('9')">9</button>
-<button class="operator" onclick="addValue('/')">÷</button>
+<button class="function" onclick="addToDisplay('(')">(</button>
+<button class="function" onclick="addToDisplay(')')">)</button>
+<button class="function" onclick="addToDisplay('^')">xʸ</button>
+<button class="operator" onclick="addToDisplay('+')">+</button>
 
-<button onclick="addValue('4')">4</button>
-<button onclick="addValue('5')">5</button>
-<button onclick="addValue('6')">6</button>
-<button class="operator" onclick="addValue('*')">×</button>
+<button onclick="addToDisplay('7')">7</button>
+<button onclick="addToDisplay('8')">8</button>
+<button onclick="addToDisplay('9')">9</button>
+<button class="function" onclick="addToDisplay('Math.PI')">π</button>
 
-<button onclick="addValue('1')">1</button>
-<button onclick="addValue('2')">2</button>
-<button onclick="addValue('3')">3</button>
-<button class="operator" onclick="addValue('-')">−</button>
+<button onclick="addToDisplay('4')">4</button>
+<button onclick="addToDisplay('5')">5</button>
+<button onclick="addToDisplay('6')">6</button>
+<button class="function" onclick="addToDisplay('Math.E')">e</button>
 
-<button class="zero" onclick="addValue('0')">0</button>
-<button onclick="addValue('.')">.</button>
-<button class="operator" onclick="addValue('+')">+</button>
+<button onclick="addToDisplay('1')">1</button>
+<button onclick="addToDisplay('2')">2</button>
+<button onclick="addToDisplay('3')">3</button>
+<button class="function" onclick="addToDisplay('!')">x!</button>
 
-<button class="equal" style="grid-column:span 4" onclick="calculate()">=</button>
+<button onclick="addToDisplay('0')">0</button>
+<button onclick="addToDisplay('.')">.</button>
+<button class="history-btn" onclick="toggleHistory()">History</button>
+<button class="equal" onclick="calculate()">=</button>
 
 </div>
+
+<div id="history" class="history">
+
+<h2>Calculation History</h2>
+
+<div id="historyList" class="history-list">
+<div class="no-history">No history yet</div>
 </div>
+
+<button class="clear-history" onclick="clearHistory()">
+Clear History
+</button>
+
+</div>
+
+</div>
+
+<div class="footer">
+© 2026 Rayyan Saddique
+</div>
+
+</div>
+
 
 <script>
 
-const display = document.getElementById("display");
+let display = document.getElementById("display");
 
-function addValue(value){
 
-    if(display.value === "0"){
+// Add text to display
+function addToDisplay(value) {
+
+    if (display.value === "0" && value !== ".") {
         display.value = value;
-    }else{
+    } else {
         display.value += value;
     }
 }
 
-function clearDisplay(){
+
+// Clear display
+function clearDisplay() {
     display.value = "0";
 }
 
-function deleteLast(){
 
-    if(display.value.length <= 1){
+// Delete last character
+function deleteLast() {
+
+    if (display.value.length <= 1) {
         display.value = "0";
-    }else{
-        display.value = display.value.slice(0,-1);
+    } else {
+        display.value = display.value.slice(0, -1);
     }
 }
 
-function calculate(){
 
-    try{
+// Percentage
+function percentage() {
 
-        let expression = display.value;
+    try {
 
-        let result = Function(
-            '"use strict"; return (' + expression + ')'
-        )();
+        let value = parseFloat(display.value);
 
-        if(!isFinite(result)){
-            throw new Error();
+        if (isNaN(value)) {
+            display.value = "Error";
+            return;
         }
 
-        display.value = Number(result.toFixed(10));
+        display.value = value / 100;
 
-    }catch(error){
+    } catch {
+        display.value = "Error";
+    }
+}
+
+
+// Factorial
+function factorial(n) {
+
+    if (n < 0 || !Number.isInteger(n)) {
+        throw new Error("Invalid factorial");
+    }
+
+    if (n === 0 || n === 1) {
+        return 1;
+    }
+
+    let result = 1;
+
+    for (let i = 2; i <= n; i++) {
+        result *= i;
+    }
+
+    return result;
+}
+
+
+// Calculate
+function calculate() {
+
+    let expression = display.value;
+
+    try {
+
+        let converted = expression;
+
+        // Factorial
+        converted = converted.replace(
+            /(\d+(?:\.\d+)?)!/g,
+            "factorial($1)"
+        );
+
+        // Powers
+        converted = converted.replace(/\^/g, "**");
+
+        // Square root
+        converted = converted.replace(
+            /sqrt\(/g,
+            "Math.sqrt("
+        );
+
+        // Sin
+        converted = converted.replace(
+            /sin\(/g,
+            "Math.sin(toRadians("
+        );
+
+        // Cos
+        converted = converted.replace(
+            /cos\(/g,
+            "Math.cos(toRadians("
+        );
+
+        // Tan
+        converted = converted.replace(
+            /tan\(/g,
+            "Math.tan(toRadians("
+        );
+
+        // Log base 10
+        converted = converted.replace(
+            /log\(/g,
+            "Math.log10("
+        );
+
+        // Natural log
+        converted = converted.replace(
+            /ln\(/g,
+            "Math.log("
+        );
+
+        // Fix trigonometric closing brackets
+        converted = fixTrigBrackets(converted);
+
+        let result = Function(
+            "factorial",
+            "toRadians",
+            "return " + converted
+        )(
+            factorial,
+            toRadians
+        );
+
+        if (!isFinite(result)) {
+            throw new Error("Invalid calculation");
+        }
+
+        result = Number(result.toFixed(10));
+
+        display.value = result;
+
+        saveHistory(expression, result);
+
+    } catch (error) {
 
         display.value = "Error";
 
-        setTimeout(()=>{
+        setTimeout(() => {
             display.value = "0";
-        },1200);
+        }, 1200);
     }
 }
+
+
+// Convert degrees to radians
+function toRadians(degrees) {
+    return degrees * Math.PI / 180;
+}
+
+
+// Fix sin/cos/tan brackets
+function fixTrigBrackets(expression) {
+
+    let result = expression;
+
+    let countSin = (result.match(/Math\.sin\(toRadians\(/g) || []).length;
+    let countCos = (result.match(/Math\.cos\(toRadians\(/g) || []).length;
+    let countTan = (result.match(/Math\.tan\(toRadians\(/g) || []).length;
+
+    let total = countSin + countCos + countTan;
+
+    for (let i = 0; i < total; i++) {
+        result += ")";
+    }
+
+    return result;
+}
+
+
+// Save history
+function saveHistory(expression, result) {
+
+    let history =
+        JSON.parse(localStorage.getItem("calculatorHistory")) || [];
+
+    history.unshift({
+        expression: expression,
+        result: result,
+        time: new Date().toLocaleString()
+    });
+
+    // Keep last 50 calculations
+    history = history.slice(0, 50);
+
+    localStorage.setItem(
+        "calculatorHistory",
+        JSON.stringify(history)
+    );
+
+    showHistory();
+}
+
+
+// Show history
+function showHistory() {
+
+    let historyList =
+        document.getElementById("historyList");
+
+    let history =
+        JSON.parse(localStorage.getItem("calculatorHistory")) || [];
+
+    if (history.length === 0) {
+
+        historyList.innerHTML =
+            '<div class="no-history">No history yet</div>';
+
+        return;
+    }
+
+    historyList.innerHTML = "";
+
+    history.forEach((item, index) => {
+
+        let div = document.createElement("div");
+
+        div.className = "history-item";
+
+        div.innerHTML = `
+            <strong>${escapeHTML(item.expression)}</strong>
+            = ${escapeHTML(String(item.result))}
+            <br>
+            <small>${escapeHTML(item.time)}</small>
+        `;
+
+        div.onclick = function() {
+            display.value = item.result;
+        };
+
+        historyList.appendChild(div);
+    });
+}
+
+
+// Clear history
+function clearHistory() {
+
+    localStorage.removeItem("calculatorHistory");
+
+    showHistory();
+}
+
+
+// Open / close history
+function toggleHistory() {
+
+    let history =
+        document.getElementById("history");
+
+    if (history.style.display === "block") {
+        history.style.display = "none";
+    } else {
+        history.style.display = "block";
+        showHistory();
+    }
+}
+
+
+// Protect history display
+function escapeHTML(text) {
+
+    let div = document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+}
+
+
+// Keyboard support
+document.addEventListener("keydown", function(event) {
+
+    let key = event.key;
+
+    if (
+        (key >= "0" && key <= "9") ||
+        key === "." ||
+        key === "+" ||
+        key === "-" ||
+        key === "*" ||
+        key === "/" ||
+        key === "(" ||
+        key === ")" ||
+        key === "^"
+    ) {
+
+        addToDisplay(key);
+    }
+
+    if (key === "Enter") {
+        calculate();
+    }
+
+    if (key === "Backspace") {
+        deleteLast();
+    }
+
+    if (key === "Escape") {
+        clearDisplay();
+    }
+
+});
+
+
+// Load history when page opens
+showHistory();
 
 </script>
 
 </body>
 </html>
-```
